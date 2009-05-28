@@ -1,0 +1,70 @@
+<!-- please note the informations in skins/default/wm-window.html -->
+<LINK rel=stylesheet href=../../winlike/winman/winman.css>
+<style>
+Window {
+	height:50px;
+	transparent:true;	
+
+	border-left-width:1px;
+	border-left-style:solid;
+	border-left-color:#ff6600;
+	
+	border-right-width:1px;
+	border-right-style:solid;
+	border-right-color:#ff6600;
+	
+	border-bottom-width:1px;
+	border-bottom-style:solid;
+	border-bottom-color:#ff6600;
+	
+	border-top-width:0px;
+	}
+
+Icons {
+	width:20;
+	height:22;
+	bottom:15;
+	}
+
+body {
+	background-color:transparent;
+	border-top-width:0px;
+	border-top-style:solid;
+	border-top-color:#808080;
+	}
+</style>
+<BODY onDragStart="self.event.returnValue=false;self.event.cancelBubble=true;" onSelectStart="self.event.returnValue=false;"> 
+<DIV style="overflow:hidden;position:absolute;" id=3>
+  <DIV id=16 style="background-image:url(bottom.png)"><img src=bottom.png><a id=17 target=__ onDragStart='self.event.returnValue=true;self.event.cancelBubble=true;'><img src=intern.png border=0></a></DIV>
+  <DIV id=15 style="z-index:1;background-image:url(grip.png)"><img src=grip.png><font style="position:absolute;font-size:0px;top:-15">&nbsp;</FONT></DIV>
+  <DIV id=18 style="z-index:2;background-image:url(../trans.gif)"><img src=../trans.gif width="1" height="1"><font style="position:absolute;font-size:0px;top:-15">&nbsp;</font></DIV>
+	<IMG id=1 style="z-index:2" class=HA src=symbol.png>
+   	<IMG id=27 style="z-index:2" src=forward_off.png>
+	<IMG id=28 class=HA style="z-index:2;visibility:hidden" src=forward.png>
+	<IMG id=5 style="z-index:4;" src=back_off.png>
+	<IMG id=51 class=HA style="z-index:2;visibility:hidden" src=back.png>
+  
+<DIV id=25 style="z-index:2">
+  <IMG id=2 class=HA src=close.png>
+  <IMG id=4 class=HA src=max.png>
+  <IMG id=6 class=HA src=min.png>
+</DIV>
+  <iframe id=__ name=__ style="display:none;position:absolute;left:-3;width:1;"></iframe>
+  <!-- replace the normal title.gif by a transparent image and remove th width:100% -->
+    <img id=19 style="position:absolute;top:0;z-index:1" src=../trans.gif width="1" height="1">
+    <img id=10 style="position:absolute;left:0;width:0px;z-index:1" src=../trans.gif width="1" height="1"><img id=11 style="position:absolute;width:0px;z-index:1" src=../trans.gif width="1" height="1">
+  <!-- for a repeating backgrund (non stretch) insert here an background-image -->
+  <DIV id=24 style="background-image:url(bg.png);">
+  	<nobr style="color:#FFFFFF; font-family:tahoma,verdana,arial,helvetica,sans-serif;
+		font-size: 8pt;
+  		font-weight:bold;
+		padding-left:8px;
+		padding-top:4px;
+		text-align:left;
+		letter-spacing: 0.1em;
+  filter: progid:DXImageTransform.Microsoft.dropShadow(Color=#909090,offX=1,offY=1,positive=true);"
+		id="13">
+	</NOBR>
+  </DIV>
+</DIV>
+</BODY>
