@@ -250,10 +250,9 @@ $result=mysql_query($query)
 or die ("Error".mysql_error());
 return $result;
 }
-function get_file_contents ($fid) //Problema en el AJAX
+function get_file_contents ($fid)
 {
-$query="SELECT * FROM files WHERE  id=" . $server['id'];  
-die($query);
+$query="SELECT * FROM files WHERE  id=". $fid;  
 $result=mysql_query($query)
 or die ("Error".mysql_error());
 $row=mysql_fetch_array($result);

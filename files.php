@@ -28,7 +28,8 @@ exit();
  var menu4 = [ 
 	{'Abrir':{ onclick:function(menuItem,menu) {
 	var filen = $(this).attr("class");
-	softn=substr(filen,5); 
+	filen=substr(filen,5); 
+	filen=substr(filen,0,strpos(filen,"ui-"));
 	 $.get("files.php", {mode: "open", ip: "<?php echo $_GET['ip'] ?>", hash: "<?php echo $_GET['hash'] ?>", file: filen},  function(data){if(strpos(data, "Error")==false){
 	  																											$("#panel").html(data);
 																												$("#panel").show("blind", {}, 1000);
