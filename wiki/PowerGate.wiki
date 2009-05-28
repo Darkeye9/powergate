@@ -1,10 +1,10 @@
 #labels Featured
-= Introduction =
+== Introduction ==
 
 Powergate born from an idea from the Hackers game Uplink and the encouragement of the programmer of PicknRoll.org.
 
 
-= The game =
+== The game ==
 
 The main purpose of PG is to emulate a remote Desktop where you, the Hacker, work.
 You have many software and hardware to buy and missions to accomplish.
@@ -16,7 +16,7 @@ Users can communicate to each others by using the message system, emulating emai
 
 Like in real computers you can buy and sell hardware or Software including games.
 
-= Actual status =
+== Actual status ==
 
 The game is far from being ready for release, we only have a basic structure for build all the game.
 
