@@ -24,6 +24,9 @@ session_start();
 	$.get("adminsoft.php", {op: "borrar", soft: softn  },  function(data){if(strpos(data, "Error")==false){
 																												$(".soft_"+softn).hide("explode");
 																												setTimeout(function(){$(".soft_"+softn).remove();},700);
+																												}else
+																												{
+																												alert(data);
 																												}});}
 	}, icon:'icons/contx_abrir.png', disabled:false }},
 	

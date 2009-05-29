@@ -11,6 +11,14 @@ or die ("Error".mysql_error());
 $row=mysql_fetch_array($result);
 return $row;
 }
+function get_file_info ($fid)
+{
+$query="SELECT * FROM files WHERE id=$fid";
+$result=mysql_query($query)
+or die ("Error".mysql_error());
+$row=mysql_fetch_array($result);
+return $row;
+}
 function get_user_info ($name)
 {
 if(is_numeric($name))
@@ -36,14 +44,28 @@ $result=mysql_query($query)
 or die ("Error".mysql_error());
 return $result;
 }
-function borrar_soft ($username, $softn) //#1
+function borrar_soft ($username, $softn)
 {
 $uinfo=get_user_info($username);
 $query="DELETE FROM soft WHERE user = '". $uinfo['id'] ."' AND sid = '$softn'";
 $result=mysql_query($query)
 or die ("Error".mysql_error());
 }
-
+function borrar_file ($user ,$fid)
+{
+$uinfo=get_user_info($user);
+$file_info=get_file_info($fid);
+if ($uinfo['id']==$file_info['user'] or $file_info['user']=" ")
+{
+$query="DELETE FROM files WHERE id =". $fid;
+$result=mysql_query($query)
+or die ("Error".mysql_error());
+return "Archivo borrado correctamente";
+}else
+{
+return "Acceso Denegado";
+}
+}
 function windows_save ($user, $datos)
 {
 $datos = str_replace("\\", "", $datos);
@@ -76,7 +98,7 @@ or die ("Error".mysql_error());
 $row=mysql_fetch_array($result);
 return $row;
 }
-function borrar_hard ($username, $hardn) //#1
+function borrar_hard ($username, $hardn)
 {
 $uinfo=get_user_info($username);
 $query="DELETE FROM hard WHERE user = '". $uinfo['id'] ."' AND hid = '$hardn'";
@@ -257,11 +279,5 @@ $result=mysql_query($query)
 or die ("Error".mysql_error());
 $row=mysql_fetch_array($result);
 return $row['contenido'];
-}
-function delete_file ($fid)
-{
-$query="DELETE FROM files WHERE id = $fid";
-$result=mysql_query($query)
-or die ("Error".mysql_error());
 }
  ?>

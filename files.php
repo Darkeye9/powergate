@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include("mysqlcon.php");
 $info = get_server_info($_GET['ip']);
 if ($_GET['hash']!=$info['prothash'])
@@ -9,6 +10,11 @@ die("Acceso Denegado");
 if ($_GET['mode']=="open")
 {
 echo str_replace("\r\n","<br />",get_file_contents($_GET['file'], $_GET['ip']));
+exit();
+}
+if ($_GET['mode']=="borrar")
+{
+echo borrar_file($_SESSION['username'] ,$_GET['file']);
 exit();
 }
 
@@ -39,11 +45,12 @@ exit();
 	{'Borrar':{ onclick:function(menuItem,menu) {
 	 if(confirm('Esta seguro?\r\nEsta acción no tiene marcha atrás'))
 	 { 
-	var softn = $(this).attr("class");
-	softn=substr(softn,11);   
-	$.get("adminsoft.php", {op: "borrar", soft: softn  },  function(data){if(strpos(data, "Error")==false){
-																												$(".soft_"+softn).hide("explode");
-																												setTimeout(function(){$(".soft_"+softn).remove();},700);
+	var filen = $(this).attr("class");
+	filen=substr(filen,5); 
+	filen=substr(filen,0,strpos(filen,"ui-"));
+	$.get("files.php", {mode: "borrar", ip: "<?php echo $_GET['ip'] ?>", hash: "<?php echo $_GET['hash'] ?>", file: filen},  function(data){if(strpos(data, "Error")==false){
+																												$("#panel").html(data);
+																												$("#panel").show("blind", {}, 1000);
 																												}});}
 	}, icon:'icons/contx_abrir.png', disabled:false }}
 	];
@@ -115,14 +122,7 @@ echo '<li class="file ' . $file['id'] . '">' . $file['nombre'] . '</li>';
 </ol></td>
         </tr>
 </table>
-
-
-<br />
-<table width="200" border="0">
-  <tr>
-    <td>Seleccionados: <img class="delete" src="icons/delete.png" width="16" height="16" /></td>
-  </tr>
-</table></td>
+</td>
     <td width="50%"></td>
   </tr>
 </table><div id="panel" class="resultado ui-corner-all"></div>
