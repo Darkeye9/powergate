@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include("mysqlcon.php");
 $user = $_SESSION['username'];
 $op = $_GET["op"];
