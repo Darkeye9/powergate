@@ -76,9 +76,10 @@ body {
 </div>
 <div id="apDiv2">
   <p class="style2"><strong>Ultimos cambios:</strong></p>
-  <p class="style1">[+] Funcion de apagar<br />
-  [+] Layout de Sistema<br />
-  [+] Programas dinamizados<br />
+  <p class="style1">[+] Sistema de misiones completo<br />
+    [+] Funcion de apagar<br />
+    [+] Layout de Sistema<br />
+    [+] Programas dinamizados<br />
   [+] Administraci&oacute;n de Programas</p>
 </div>
 </body>
