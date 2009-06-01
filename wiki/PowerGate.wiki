@@ -20,6 +20,8 @@ Like in real computers you can buy and sell hardware or Software including games
 
 The game is far from being ready for release, we only have a basic structure for build all the game.
 
+Although since May the missions can be taken and accomplished, a lot of work is needed to be done.
+
 The main Desktop page is almost completed, misions can managed, but the server's interface is no ready yet.
 
 Due to the lack of plans and time, there is not a fixed date for releasing the project.
