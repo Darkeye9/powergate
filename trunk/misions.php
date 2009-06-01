@@ -81,6 +81,10 @@ var menu4 = [
 	$.get("misions.php", { op: "abandonar", ms: msn  },  function(data){if(strpos(data, "Error")==false){
 																												$(".ms_"+msn).hide("explode");
 																												setTimeout(function(){$(".ms_"+msn).remove();},700);
+																												}
+																												else
+																												{
+																												alert(data);
 																												}});}
 	}, icon:'icons/contx_abrir.png', disabled:false }}
 	

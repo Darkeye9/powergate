@@ -172,19 +172,24 @@ return $row;
 }
 function get_user_ms ($name)
 {
-$query="SELECT * FROM misiones WHERE user='$name'";
+$uinfo=get_user_info($name);
+$query="SELECT * FROM misiones WHERE user='". $uinfo['id'] ."'";
 $result=mysql_query($query)
 or die ("Error".mysql_error());
 return $result;
 }
 function abandonar_ms ($msid, $user)
 {
-$query="UPDATE misiones SET user = '', final='' WHERE id=$msid AND user='$user'";
-echo $query;
+$uinfo=get_user_info($user);
+$info=get_ms_info($msid);
+$pos1=strpos($info['mision'],"x");
+$pos2=strpos($info['mision'],"x",$pos1+1);
+$num= substr($info['mision'],$pos1+1,$pos2-$pos1-1);
+$final=str_replace($num, "%fid%", $info['mision']);
+$query="UPDATE misiones SET mision = '". $final ."', user = '', final='' WHERE id=$msid AND user='". $uinfo['id'] ."'";
 $result=mysql_query($query)
-or die ("Error".mysql_error());
-$ms=get_ms_info($msid);
-$empresa=get_empresa_info($ms['objetivo']);
+or die (" Error".mysql_error());
+$empresa=get_empresa_info($info['objetivo']);
 send_msg("Admin. Misiones", $user, "Has abandonado una misión", "<font color=red>Has abandonado la misión de atacar la empresa ". $empresa['nombre'] ."</font>");
 }
 function get_ms_info ($msid)
@@ -197,24 +202,37 @@ return $row;
 }
 function aceptar_ms ($msid, $user)
 {
+$uinfo=get_user_info($user);
 $info=get_ms_info($msid);
 $fechafinal=mktime()+$info['limite'];
-$query="UPDATE misiones SET user = '$user', final='$fechafinal' WHERE id=$msid";
+$query="UPDATE misiones SET user = '". $uinfo['id'] ."', final='$fechafinal' WHERE id=$msid";
 $result=mysql_query($query)
 or die ("Error".mysql_error());
-$uinfo=get_user_info($user);
 $php = str_replace("%user%", $uinfo['id'], $info['prep']);
 $ms=get_ms_info($msid);
 $empresa=get_empresa_info($ms['objetivo']);
 send_msg("Admin. Misiones", $user, "Mision Aceptada", "Has aceptado atacar la empresa ". $empresa['nombre'] ."<br /><b>Misión:</b><br />". $ms['desc']);
 eval($php);
-}
-function fracasar_ms ($msid, $user) //Actualmente no usada
-{
-$query="UPDATE misiones SET user = '', final='' WHERE id=$msid AND user='$user'";
+$fid=mysql_insert_id();
+$final=str_replace("%fid%", $fid, $info['mision']);
+$query="UPDATE misiones SET mision = '". $final ."' WHERE id=$msid";
 $result=mysql_query($query)
 or die ("Error".mysql_error());
-send_msg("Admin. Misiones", $user, "Misión fracasada", "<font color=red>Has fracasado una mision.</font>");
+}
+function fracasar_ms ($msid, $user) //Actualmente no usada, va a usarse en Update()
+{
+$uinfo=get_user_info($user);
+$info=get_ms_info($msid);
+$pos1=strpos($info['mision'],"x");
+$pos2=strpos($info['mision'],"x",$pos1+1);
+$num= substr($info['mision'],$pos1+1,$pos2-$pos1-1);
+$final=str_replace($num, "%fid%", $info['mision']);
+$query="UPDATE misiones SET mision = '". $final ."', user = '', final='' WHERE id=$msid AND user='". $uinfo['id'] ."'";
+$result=mysql_query($query)
+or die ("Error".mysql_error());
+$ms=get_ms_info($msid);
+$empresa=get_empresa_info($ms['objetivo']);
+send_msg("Admin. Misiones", $user, "Has Fracasado una misión", "<font color=red>Has fracasado en la misión de atacar la empresa ". $empresa['nombre'] ."</font>");
 }
 function get_servers_from_domain ($dominio)
 {
@@ -238,12 +256,21 @@ $result=mysql_query($query)
 or die ("Error".mysql_error());
 }
 }
-function check($sid, $file, $estado)
+function check($file, $estado)
 {
-$query="SELECT * FROM files WHERE servidor='$sid' AND nombre='$file'";
+$file=substr($file,1,strlen($file)-2);
+$query="SELECT * FROM files WHERE id=$file";
 $result=mysql_query($query)
 or die ("Error".mysql_error());
-if (mysql_num_rows($result)==$estado) { return true; }else { return false; }
+if ($estado==0 and mysql_num_rows($result)==0)
+{
+return true;
+}
+if ($estado==1 and mysql_num_rows($result)==1)
+{
+return true;
+}
+return false;
 }
 function get_prot_info ($pid)
 {
@@ -280,4 +307,51 @@ or die ("Error".mysql_error());
 $row=mysql_fetch_array($result);
 return $row['contenido'];
 }
+function completar_ms ($msid, $user)
+{
+$uinfo=get_user_info($user);
+$info=get_ms_info($msid);
+$pos1=strpos($info['mision'],"x");                             //
+$pos2=strpos($info['mision'],"x",$pos1+1);                     // En el futuro probablemnte, las misiones completadas se borraran.
+$num= substr($info['mision'],$pos1+1,$pos2-$pos1-1);           //
+$final=str_replace($num, "%fid%", $info['mision']);   
+$puntos = $uinfo['puntos']+3*$info['nivel'];
+$dinero= $uinfo['dinero']+$info['dinero'];
+$query="UPDATE users SET dinero = '". $dinero ."', puntos = '". $puntos ."' WHERE id=". $uinfo['id'];
+$result=mysql_query($query)
+or die (" Error".mysql_error());
+
+$query="UPDATE misiones SET mision = '". $final ."', user = '', final='' WHERE id=$msid AND user='". $uinfo['id'] ."'";
+$result=mysql_query($query)
+or die (" Error".mysql_error());
+$empresa=get_empresa_info($info['objetivo']);
+send_msg("Admin. Misiones", $user, "Enhorabuena", "<font color=green>Has completado satisfactoriamente la misión de atacar la empresa ". $empresa['nombre'] ."</font>");
+}
+function update ()
+{
+$query="SELECT * FROM misiones WHERE user != ''";  
+$result=mysql_query($query)
+or die ("Error".mysql_error());
+while ($row=mysql_fetch_array($result))
+{
+//echo "Mision:".$row['id']."-->Usuario".$row['user']."--->Estado:";
+if (eval($row['mision']))
+{
+//echo "Completada";
+completar_ms($row['id'], $row['user']);
+}else
+{
+if ($row['final']>=mktime())
+{
+//echo "Incompleta";
+}else
+{
+//echo "Fracasada";
+fracasar_ms($row['id'], $row['user']);
+} //else de if limite
+} //else de if eval
+} //while
+} //funcion
+
+update();
  ?>
